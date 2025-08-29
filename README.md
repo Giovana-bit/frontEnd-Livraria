@@ -1,12 +1,20 @@
-# React + Vite
+# 📚 Front-end Livraria
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um sistema **front-end** desenvolvido com **React** e **Vite**, que possui uma tela de **login com e-mail e senha** e faz integração com APIs utilizando **Axios**.  
+Este projeto foi criado com foco em **organização**, **boas práticas de componentização** e **consumo de dados externos**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologias utilizadas
+- [React](https://reactjs.org/) — Biblioteca para construção de interfaces  
+- [Vite](https://vitejs.dev/) — Build tool rápido para desenvolvimento com React  
+- [Axios](https://axios-http.com/) — Cliente HTTP para consumo de APIs  
+- [JavaScript / JSX](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📌 Funcionalidades
+- Tela de login com autenticação por **e-mail e senha**   
+- Estrutura de componentes reutilizáveis para melhor organização do projeto  
+
+---
