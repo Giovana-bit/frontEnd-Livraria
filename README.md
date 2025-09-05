@@ -14,7 +14,8 @@ Este projeto foi criado com foco em **organização**, **boas práticas de compo
 ---
 
 ## 📌 Funcionalidades
-- Tela de login com autenticação por **e-mail e senha**   
+- Tela de login com autenticação por **e-mail e senha**
+- Tela da cadastro com: **nome, e-mail, senha, tipo e usuário**
 - Estrutura de componentes reutilizáveis para melhor organização do projeto
 - Conexão com o Back-End [Livraria](https://github.com/Giovana-bit/projetoLivraria)
 
