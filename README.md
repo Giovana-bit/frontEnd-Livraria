@@ -1,22 +1,42 @@
 # 📚 Front-end Livraria
 
-Um sistema **front-end** desenvolvido com **React** e **Vite**, que possui uma tela de **login com e-mail e senha** e faz integração com APIs utilizando **Axios**.  
-Este projeto foi criado com foco em **organização**, **boas práticas de componentização** e **consumo de dados externos**.
+Aplicação **Front-end** desenvolvida em **React com Vite**, que implementa telas de **Login** e **Cadastro de Usuário**, realizando integração com APIs através do **Axios**.  
+O projeto segue **boas práticas de componentização**, **organização de código** e **consumo de dados externos**.
 
 ---
 
-## 🚀 Tecnologias utilizadas
-- [React](https://reactjs.org/) — Biblioteca para construção de interfaces  
-- [Vite](https://vitejs.dev/) — Build tool rápido para desenvolvimento com React  
-- [Axios](https://axios-http.com/) — Cliente HTTP para consumo de APIs  
-- [JavaScript / JSX](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)  
+## 🚀 Tecnologias
+
+- ⚛️ [React](https://reactjs.org/) — Biblioteca para criação de interfaces
+- ⚡ [Vite](https://vitejs.dev/) — Ferramenta de build e desenvolvimento rápido
+- 🌐 [Axios](https://axios-http.com/) — Cliente HTTP para consumo de APIs
+- 💻 [JavaScript / JSX](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
+- 🔔 [React Toastify](https://fkhadra.github.io/react-toastify/introduction) — Notificações de sucesso/erro
 
 ---
 
 ## 📌 Funcionalidades
-- Tela de login com autenticação por **e-mail e senha**
-- Tela da cadastro com: **nome, e-mail, senha, tipo e usuário**
-- Estrutura de componentes reutilizáveis para melhor organização do projeto
-- Conexão com o Back-End [Livraria](https://github.com/Giovana-bit/projetoLivraria)
+
+✅ Tela de **Login** com autenticação via **e-mail e senha**  
+✅ Tela de **Cadastro** com campos: **nome, e-mail, senha e tipo de usuário**  
+✅ Exibição de **notificações amigáveis** (sucesso/erro) com React Toastify  
+✅ Estrutura de **componentes reutilizáveis** para melhor organização do projeto  
+✅ Integração com o Back-End [📦 Projeto Livraria](https://github.com/Giovana-bit/projetoLivraria)  
 
 ---
+
+## 🖼️ Telas do sistema
+
+### 🔑 Login
+- Autenticação do usuário com **e-mail e senha**
+- Exibição de mensagem de sucesso/erro
+
+### 📝 Cadastro
+- Formulário para criação de usuário
+- Seleção do tipo de usuário (**Comum** ou **Admin**)
+- Feedback visual via notificações
+
+---
+
+## 📂 Estrutura de Pastas
+
