@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./login.css";
 import api from "../../services/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -25,12 +27,43 @@ function Login() {
 
       const { data } = await api.post("/login", payload);
 
-      alert(data.response);
+      toast.success("Login efetuado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
 
       sessionStorage.setItem("tokenJWT", data.token); // Adicionar Token
+      console.log("Resposta do backend:", data);
+
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.response);
+        toast.error(error.response.data.response, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error("Erro ao tentar fazer login. Tente novamente!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   };
@@ -68,6 +101,9 @@ function Login() {
           Não tem conta? <Link to="/register">Cadastre-se</Link>
         </p>
       </div>
+
+      {/* Container para exibir os toasts */}
+      <ToastContainer />
     </div>
   );
 }

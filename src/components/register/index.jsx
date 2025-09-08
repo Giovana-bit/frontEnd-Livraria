@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./register.css";
 import api from "../../services/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [name, setNome] = useState("");
@@ -32,10 +34,42 @@ function Register() {
 
       const { data } = await api.post("/register", payload);
 
-      alert(data.response);
+      toast.success("Cadastro realizado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      console.log("Resposta do backend:", data);
+
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.response);
+        toast.error(error.response.data.response, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error("Erro ao tentar cadastrar. Tente novamente!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   };
@@ -88,6 +122,9 @@ function Register() {
           Já tem conta? <Link to="/">Fazer login</Link>
         </p>
       </div>
+
+      {/* Container para exibir os toasts */}
+      <ToastContainer />
     </div>
   );
 }
