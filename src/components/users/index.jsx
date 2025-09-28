@@ -32,7 +32,7 @@ function Register() {
     try {
       const payload = { name, email, password, typeUser };
 
-      const { data } = await api.post("/register", payload);
+      const { data } = await api.post("/user", payload);
 
       toast.success("Cadastro realizado com sucesso!", {
         position: "top-right",
