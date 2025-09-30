@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // <- importar useNavigate
 import "./login.css";
 import api from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // <- inicializa o hook
 
   // capturar alterações
   const handleChange = (e) => {
@@ -29,7 +30,7 @@ function Login() {
 
       toast.success("Login efetuado com sucesso!", {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 1500, // reduzido para não demorar muito
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -38,8 +39,14 @@ function Login() {
         theme: "light",
       });
 
-      sessionStorage.setItem("tokenJWT", data.token); // Adicionar Token
+      sessionStorage.setItem("tokenJWT", data.token); // salva token
+
       console.log("Resposta do backend:", data);
+
+      // redireciona para home após 1,5s (tempo do toast)
+      setTimeout(() => {
+        navigate("/home");
+      }, 1500);
 
     } catch (error) {
       if (error.response) {
