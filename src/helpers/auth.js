@@ -16,4 +16,4 @@ function isAuthenticated() {
     return !!getUser(); // retorna true se o usuário estiver autenticado
 }
 
-export default {isAuthenticated,getUser};
+export {isAuthenticated,getUser};

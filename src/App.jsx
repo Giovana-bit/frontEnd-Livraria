@@ -5,27 +5,77 @@ import Register from "./components/users";
 import Home from "./components/home";
 import Admin from "./components/admin";
 import List from "./components/list";
+import NotFound from "./components/notFound"
+import CreateBooks from "./components/createBooks";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRouter from "./helpers/protectedRouter";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Rota padrão -> Login */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" 
+        element={
+        <ProtectedRouter>
+        <Login />
+        </ProtectedRouter>
+        } />
 
-        {/* Rota do cadastro */}
-        <Route path="/register" element={<Register />} />
+        {/* Cadastro deve estar liberado */}
+        <Route path="/register"
+        element={
+        <ProtectedRouter>
+        <Register />
+        </ProtectedRouter>
+        } />
 
-        {/* Rota do home */}
-        <Route path="/home" element={<Home />} />
+        {/* Rotas protegidas */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRouter>
+              <Home />
+            </ProtectedRouter>
+          }
+        />
 
-        {/* Rota do admin */}
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRouter>
+              <Admin />
+            </ProtectedRouter>
+          }
+        />
 
-        {/* Rota do listar */}
-        <Route path="/list" element={<List />} />
+        <Route
+          path="/createBooks"
+          element={
+            <ProtectedRouter>
+              <CreateBooks />
+            </ProtectedRouter>
+          }
+        />
+
+        <Route
+          path="/list"
+          element={
+            <ProtectedRouter>
+              <List />
+            </ProtectedRouter>
+          }
+        />
+
+        <Route
+          path="/notFound"
+          element={
+            <ProtectedRouter>
+              < NotFound />
+            </ProtectedRouter>
+          }
+        />
       </Routes>
 
       {/* ToastContainer deve ficar fora das rotas */}

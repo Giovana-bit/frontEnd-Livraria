@@ -28,6 +28,8 @@ function Login() {
 
       const { data } = await api.post("/login", payload);
 
+      sessionStorage.setItem("tokenJWT", data.token) // Validação do Token
+
       toast.success("Login efetuado com sucesso!", {
         position: "top-right",
         autoClose: 1500, // reduzido para não demorar muito
@@ -47,6 +49,8 @@ function Login() {
       setTimeout(() => {
         navigate("/home");
       }, 1500);
+    
+    return navigate("/home");
 
     } catch (error) {
       if (error.response) {
