@@ -5,8 +5,9 @@ import Register from "./components/users";
 import Home from "./components/home";
 import Admin from "./components/admin";
 import List from "./components/list";
-import NotFound from "./components/notFound"
+import NotFound from "./components/notFound";
 import CreateBooks from "./components/createBooks";
+import EditProfile from "./components/editProfile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRouter from "./helpers/protectedRouter";
@@ -15,21 +16,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rota padrão -> Login */}
-        <Route path="/" 
-        element={
-        <ProtectedRouter>
-        <Login />
-        </ProtectedRouter>
-        } />
+        {/* Login */}
+        <Route path="/" element={<Login />} />
 
-        {/* Cadastro deve estar liberado */}
-        <Route path="/register"
-        element={
-        <ProtectedRouter>
-        <Register />
-        </ProtectedRouter>
-        } />
+        {/* Cadastro */}
+        <Route path="/register" element={<Register />} />
 
         {/* Rotas protegidas */}
         <Route
@@ -69,16 +60,17 @@ function App() {
         />
 
         <Route
-          path="/notFound"
+          path="/editProfile"
           element={
             <ProtectedRouter>
-              < NotFound />
+              <EditProfile />
             </ProtectedRouter>
           }
         />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {/* ToastContainer deve ficar fora das rotas */}
       <ToastContainer />
     </Router>
   );

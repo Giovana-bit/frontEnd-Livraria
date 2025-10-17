@@ -23,9 +23,9 @@ function Home() {
   const toggleDrawer = (state) => () => setOpen(state);
 
   const menuItems = [
-    { text: "Livros", icon: <LibraryBooksIcon />, path: "/livros" },
-    { text: "Novo", icon: <AddCircleIcon />, path: "/criar-livro" },
-    { text: "Perfil", icon: <AccountCircleIcon />, path: "/editar-perfil" },
+    { text: "Livros", icon: <LibraryBooksIcon />, path: "/books" },
+    { text: "Novo", icon: <AddCircleIcon />, path: "/createBooks" },
+    { text: "Perfil", icon: <AccountCircleIcon />, path: "/editProfile" },
   ];
 
   return (
