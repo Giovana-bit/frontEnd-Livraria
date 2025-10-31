@@ -1,47 +1,65 @@
-
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./editProfile.css";
 import { toast } from "react-toastify";
+import api from "../../services/api";
+import { jwtDecode } from "jwt-decode";
 
 export default function UserUpdateForm() {
-  const [imagemPreview, setImagemPreview] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [user, setUser] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    tipoUser: "funcao",
-  });
+  // Estados do usuário
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("funcao");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
-  const userId = localStorage.getItem("userId");
-
-  // Instância da API
-  const api = axios.create({
-    baseURL: "http://localhost:3333",
-  });
-
-  // Carrega os dados do usuário
+  // ========== Buscar dados do usuário logado ==========
   useEffect(() => {
-    if (userId) {
-      axios
-        .get(`http://localhost:3333/user/${userId}`)
-        .then((response) => setUser(response.data))
-        .catch(() => toast.error("Erro ao carregar dados do perfil."));
-    }
-  }, [userId]);
+    async function getUserProfile() {
+      try {
+        const token = sessionStorage.getItem("tokenJWT");
+        if (!token) {
+          toast.error("Token JWT não encontrado. Faça login novamente.");
+          return;
+        }
 
-  // Função para salvar a imagem (com JWT)
+        // Faz a requisição sem precisar do ID, já que o back usa o e-mail do token
+        const { data } = await api.get(`/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Dados do perfil do usuário:", data);
+        setEmail(data.users.email || "");
+        setUsername(data.users.name || "");
+        setPassword(data.users.password || "");
+        setRole(data.users.typeUser || "");
+        setProfilePhoto(data.profilePhoto?.url_photo_profile || null); 
+       } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+        toast.error("Erro ao buscar perfil do usuário.");
+      }
+    }
+
+    getUserProfile();
+  }, []);
+
+  // ========== Manipula imagem ==========
+  function handlePhoto(e) {
+    const { files } = e.target;
+    if (files && files[0]) {
+      const selectedImage = files[0];
+      setImagePreview(URL.createObjectURL(selectedImage));
+      saveImage(selectedImage);
+    }
+  }
+
+  // ========== Envia imagem ao servidor ==========
   async function saveImage(selectedImage) {
-    if (!selectedImage) {
-      alert("Selecione uma imagem antes de enviar.");
-      return;
-    }
-
     try {
-      const tokenJWT = sessionStorage.getItem("tokenJwt");
+      const tokenJWT = sessionStorage.getItem("tokenJWT");
       if (!tokenJWT) {
-        alert("Token JWT não encontrado. Faça login novamente.");
+        toast.error("Token JWT não encontrado. Faça login novamente.");
         return;
       }
 
@@ -57,60 +75,51 @@ export default function UserUpdateForm() {
 
       toast.success("Imagem enviada com sucesso!", {
         position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
+        autoClose: 120,
         theme: "light",
       });
     } catch (error) {
-      console.log("Erro ao enviar a imagem:", error);
+      console.error("Erro ao enviar imagem:", error);
       toast.error("Erro ao enviar a imagem. Tente novamente.", {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
         theme: "light",
       });
     }
   }
 
-  // Ao clicar na foto
-  function handlePhotoClick() {
-    document.getElementById("fileInput").click();
-  }
-
-  // Ao escolher a imagem
-  function handlePhotoChange(e) {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      setImagemPreview(URL.createObjectURL(file));
-      saveImage(file); // envia automaticamente
-    }
-  }
-
-  // Atualiza campos
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  // Envia alterações do perfil
+  // ========== Atualiza dados do perfil ==========
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (user.tipoUser === "funcao") {
+    if (role === "funcao") {
       toast.warn("Selecione uma função válida!");
       return;
     }
 
     try {
-      await axios.put(`http://localhost:3333/users/${userId}`, user);
+      const tokenJWT = sessionStorage.getItem("tokenJWT");
+      if (!tokenJWT) {
+        toast.error("Token JWT não encontrado. Faça login novamente.");
+        return;
+      }
+
+      const decoded = jwtDecode(tokenJWT);
+      const userId = decoded.id || decoded.userId; // caso o nome varie no token
+
+      await api.put(
+        `/users`,
+        { id: userId, name: username, email, password, typeUser: role },
+        {
+          headers: {
+            Authorization: `Bearer ${tokenJWT}`,
+          },
+        }
+      );
+
       toast.success("Perfil atualizado com sucesso!");
     } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
       toast.error("Erro ao atualizar perfil.");
     }
   };
@@ -121,70 +130,53 @@ export default function UserUpdateForm() {
         <h2>Editar Perfil</h2>
 
         {/* Foto de perfil */}
-        <div
-          className="profile-pic-container"
-          onClick={handlePhotoClick}
-          title="Clique para alterar a foto"
-        >
-          <img
-            src={
-              imagemPreview ||
-              "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            }
-            alt="Foto de perfil"
-            className="profile-pic"
-          />
+        <div className="profile-pic-container" title="Clique para alterar a foto">
+          <label htmlFor="image" className="button-cursor">
+            <img
+              src={
+                imagePreview ||
+                profilePhoto ||
+                "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png"
+              }
+              alt="Foto de Perfil"
+              className="profile-photo"
+            />
+            <input
+              id="image"
+              type="file"
+              name="image"
+              accept="image/*"
+              hidden
+              onChange={handlePhoto}
+            />
+          </label>
         </div>
 
-        {/* Input escondido */}
-        <input
-          type="file"
-          id="fileInput"
-          accept="image/*"
-          onChange={handlePhotoChange}
-          style={{ display: "none" }}
-        />
-
-        {/* Formulário */}
+        {/* Campos de texto */}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="nome">Nome de Usuário</label>
+          <label>Email:</label>
           <input
             type="text"
-            id="nome"
-            name="nome"
-            value={user.nome}
-            onChange={handleChange}
-            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label htmlFor="email">E-mail</label>
+          <label>Nome:</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-            required
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
-          <label htmlFor="senha">Senha</label>
+          <label>Senha:</label>
           <input
             type="password"
-            id="senha"
-            name="senha"
-            value={user.senha}
-            onChange={handleChange}
-            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
-          <label htmlFor="tipoUser">Função</label>
-          <select
-            id="tipoUser"
-            name="tipoUser"
-            value={user.tipoUser}
-            onChange={handleChange}
-            required
-          >
+          <label>Função:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="funcao">Selecione...</option>
             <option value="comum">Comum</option>
             <option value="admin">Administrador</option>
