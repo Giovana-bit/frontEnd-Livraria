@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../services/api.js";
 import {
   AppBar,
   Toolbar,
@@ -10,17 +11,29 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
-  Button,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  CircularProgress,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import EditNoteIcon from "@mui/icons-material/EditNote"; 
 
-function Home() {
+function Author() {
+  const [authors, setAuthors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+
   const toggleDrawer = (state) => () => setOpen(state);
 
   const menuItems = [
@@ -29,6 +42,20 @@ function Home() {
     { text: "Perfil", icon: <AccountCircleIcon />, path: "/editProfile" },
     { text: "Autor", icon: <EditNoteIcon />, path: "/author" },
   ];
+
+  useEffect(() => {
+    async function getAuthor() {
+      try {
+        const response = await api.get("/author");
+        setAuthors(response.data.message || []);
+      } catch (error) {
+        setError(`Erro ao carregar os dados de autor: ${error}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getAuthor();
+  }, []);
 
   return (
     <Box
@@ -40,8 +67,9 @@ function Home() {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         color: "#fff",
-      }}  
+      }}
     >
+      {/* NAVBAR */}
       <AppBar
         position="static"
         sx={{
@@ -70,6 +98,7 @@ function Home() {
               Biblioteca da Meia-Noite
             </Typography>
           </Box>
+
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 3 }}>
             {menuItems.map((item) => (
               <Button
@@ -94,6 +123,7 @@ function Home() {
         </Toolbar>
       </AppBar>
 
+      {/* DRAWER */}
       <Drawer
         anchor="left"
         open={open}
@@ -121,91 +151,95 @@ function Home() {
         </Box>
       </Drawer>
 
+      {/* CONTEÚDO */}
       <Box
         sx={{
-          height: "calc(100% - 64px)", // subtrai altura do AppBar
+          height: "calc(100% - 64px)",
+          px: { xs: 3, md: 10 },
+          py: 5,
+          backdropFilter: "brightness(0.6)",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          px: { xs: 3, md: 10 },
-          backdropFilter: "brightness(0.6)",  // escurece levemente o fundo para dar contraste
+          alignItems: "center",
+          overflowY: "auto",
         }}
       >
         <Typography
           variant="h3"
           sx={{
             fontFamily: "Cinzel, serif",
-            fontWeight: 400,
-            mb: 1,
-          }}
-        >
-          Bem-vindo à
-        </Typography>
-
-        <Typography
-          variant="h2"
-          sx={{
-            fontFamily: "Cinzel, serif",
+            fontWeight: 500,
             color: "#d4a017",
-            mb: 2,
-            textShadow: "0 0 10px rgba(0,0,0,0.8)",
-          }}
-        >
-          Biblioteca da Meia-Noite
-        </Typography>
-
-        <Typography
-          variant="h6"
-          sx={{
-            maxWidth: "600px",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 300,
             mb: 4,
-            lineHeight: 1.5,
+            textAlign: "center",
           }}
         >
-          Descubra mundos encantados, publique suas próprias histórias e
-          explore novos universos entre páginas e curiosidades. 🌙
+          Autores da Biblioteca 🌙
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Button
-            variant="contained"
-            href="/livros"
+        {loading ? (
+          <CircularProgress sx={{ color: "#d4a017" }} />
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <TableContainer
+            component={Paper}
             sx={{
-              backgroundColor: "#d4a017",
-              color: "#000",
-              fontWeight: "bold",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#e8b51f",
-              },
+              maxWidth: 900,
+              backgroundColor: "rgba(255,255,255,0.1)",
+              borderRadius: 3,
+              boxShadow: "0 0 20px rgba(0,0,0,0.6)",
             }}
           >
-            Explorar
-          </Button>
-
-          <Button
-            variant="outlined"
-            href="/createBooks"
-            sx={{
-              borderColor: "#d4a017",
-              color: "#d4a017",
-              fontWeight: "bold",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "rgba(212,160,23,0.1)",
-                borderColor: "#e8b51f",
-              },
-            }}
-          >
-            Adicionar
-          </Button>
-        </Box>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {["ID", "Nome", "Nacionalidade", "Data de Nascimento"].map(
+                    (header) => (
+                      <TableCell
+                        key={header}
+                        sx={{
+                          color: "#d4a017",
+                          fontFamily: "Poppins, sans-serif",
+                          fontWeight: "bold",
+                          backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        }}
+                      >
+                        {header}
+                      </TableCell>
+                    )
+                  )}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {authors.map((author, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "rgba(212, 160, 23, 0.15)",
+                      },
+                    }}
+                  >
+                    <TableCell sx={{ color: "#fff" }}>{author.id}</TableCell>
+                    <TableCell sx={{ color: "#fff" }}>{author.name}</TableCell>
+                    <TableCell sx={{ color: "#fff" }}>
+                      {author.nationality}
+                    </TableCell>
+                    <TableCell sx={{ color: "#fff" }}>
+                      {author.birthdate
+                        ? new Date(author.birthdate).toLocaleDateString("pt-BR")
+                        : "Não informado"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
     </Box>
   );
 }
 
-export default Home;
+export default Author;

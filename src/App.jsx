@@ -11,6 +11,7 @@ import EditProfile from "./components/editProfile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRouter from "./helpers/protectedRouter";
+import Author from "./components/author";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
             </ProtectedRouter>
           }
         />
-
+        {/* Administrador */}
         <Route
           path="/admin"
           element={
@@ -40,7 +41,7 @@ function App() {
             </ProtectedRouter>
           }
         />
-
+        {/* Criar livros */}
         <Route
           path="/createBooks"
           element={
@@ -49,7 +50,7 @@ function App() {
             </ProtectedRouter>
           }
         />
-
+        {/* Listagem */}
         <Route
           path="/list"
           element={
@@ -58,12 +59,21 @@ function App() {
             </ProtectedRouter>
           }
         />
-
+        {/* Editar perfil */}
         <Route
           path="/editProfile"
           element={
             <ProtectedRouter>
               <EditProfile />
+            </ProtectedRouter>
+          }
+        />
+        {/* Autor */}
+        <Route
+          path="/author"
+          element={
+            <ProtectedRouter>
+              <Author />
             </ProtectedRouter>
           }
         />
