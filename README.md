@@ -41,7 +41,7 @@ O projeto segue **boas práticas de componentização**, **organização de cód
 - Feedback visual via notificações de sucesso ou erro
 
 ### 📚 Catálogo
-- Página principal exibindo **todos os livros cadastrados** no sistema
+- Página principal exibindo **todos os autores cadastrados** no sistema
 - Dados carregados do **back-end** via Axios
 - Layout responsivo e organizado
 - Exibição apenas dos dados do banco, sem necessidade de recarregar a página

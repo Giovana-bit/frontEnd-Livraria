@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -12,6 +12,9 @@ import {
   Box,
   Button,
   Typography,
+  Card,
+  CardMedia,
+  CardContent,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -23,24 +26,60 @@ function Home() {
   const [open, setOpen] = useState(false);
   const toggleDrawer = (state) => () => setOpen(state);
 
+  const booksRef = useRef(null);
+
+  const scrollToBooks = () => {
+    booksRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const menuItems = [
-    { text: "Livros", icon: <LibraryBooksIcon />, path: "/books" },
+    { text: "Livros", icon: <LibraryBooksIcon />, path: "/list" },
     { text: "Novo", icon: <AddCircleIcon />, path: "/createBooks" },
     { text: "Perfil", icon: <AccountCircleIcon />, path: "/editProfile" },
     { text: "Autor", icon: <EditNoteIcon />, path: "/author" },
   ];
 
+  const livrosExemplo = [
+    {
+      titulo: "A Biblioteca da Meia-Noite",
+      imagem:
+        "https://m.media-amazon.com/images/I/81iqH8dpjuL._SY425_.jpg",
+    },
+    {
+      titulo: "Príncipe Cruel",
+      imagem:
+        "https://m.media-amazon.com/images/I/81FH6q0EqYS._SY466_.jpg",
+    },
+    {
+      titulo: "Os dois Morrem no final",
+      imagem:
+        "https://m.media-amazon.com/images/I/61QhNRjycfL._SY342_.jpg",
+    },
+    {
+      titulo: "Mulheres que correm com os lobos",
+      imagem:
+        "https://m.media-amazon.com/images/I/7121bMhcNKL._SY466_.jpg",
+    },
+    {
+      titulo: "A vida invisível de Addie LaRue",
+      imagem: "https://m.media-amazon.com/images/I/71X245OYRBL._SY466_.jpg",
+    },
+    {
+      titulo:"Coraline",
+      imagem:"https://m.media-amazon.com/images/I/91DZobBc1BL._SY466_.jpg",
+    }
+  ];
+
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         width: "100%",
         backgroundImage: `url("https://wallpapers.com/images/hd/bookshelf-background-xfix8ihv6dmfjzyu.jpg")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
         color: "#fff",
-      }}  
+      }}
     >
       <AppBar
         position="static"
@@ -70,6 +109,7 @@ function Home() {
               Biblioteca da Meia-Noite
             </Typography>
           </Box>
+
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 3 }}>
             {menuItems.map((item) => (
               <Button
@@ -121,15 +161,15 @@ function Home() {
         </Box>
       </Drawer>
 
+      {/* ===== SEÇÃO PRINCIPAL ===== */}
       <Box
         sx={{
-          height: "calc(100% - 64px)", // subtrai altura do AppBar
+          height: "calc(100vh - 64px)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "flex-start",
           px: { xs: 3, md: 10 },
-          backdropFilter: "brightness(0.6)",  // escurece levemente o fundo para dar contraste
+          backdropFilter: "brightness(0.6)",
         }}
       >
         <Typography
@@ -165,22 +205,20 @@ function Home() {
             lineHeight: 1.5,
           }}
         >
-          Descubra mundos encantados, publique suas próprias histórias e
-          explore novos universos entre páginas e curiosidades. 🌙
+          Descubra mundos encantados, publique suas próprias histórias e explore
+          novos universos entre páginas e curiosidades. 🌙
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
           <Button
             variant="contained"
-            href="/livros"
+            onClick={scrollToBooks}
             sx={{
               backgroundColor: "#d4a017",
               color: "#000",
               fontWeight: "bold",
               textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#e8b51f",
-              },
+              "&:hover": { backgroundColor: "#e8b51f" },
             }}
           >
             Explorar
@@ -202,6 +240,73 @@ function Home() {
           >
             Adicionar
           </Button>
+        </Box>
+      </Box>
+
+      {/* ===== SEÇÃO DE LIVROS ===== */}
+      <Box
+      ref={booksRef}
+        sx={{
+          width: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.85)",
+          py: 6,
+          px: { xs: 3, md: 10 },
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: "Cinzel, serif",
+            mb: 4,
+            color: "#d4a017",
+          }}
+        >
+          Livros em Destaque
+        </Typography>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+            gap: 4,
+          }}
+        >
+          {livrosExemplo.map((livro) => (
+            <Card
+              key={livro.titulo}
+              sx={{
+                backgroundColor: "#111",
+                color: "#fff",
+                borderRadius: 3,
+                boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0 0 15px rgba(212,160,23,0.5)",
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="250"
+                image={livro.imagem}
+                alt={livro.titulo}
+              />
+
+              <CardContent>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontFamily: "Cinzel, serif",
+                    textAlign: "center",
+                    color: "#d4a017",
+                  }}
+                >
+                  {livro.titulo}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
         </Box>
       </Box>
     </Box>
