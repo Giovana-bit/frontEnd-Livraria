@@ -46,6 +46,28 @@ O projeto segue **boas práticas de componentização**, **organização de cód
 - Layout responsivo e organizado
 - Exibição apenas dos dados do banco, sem necessidade de recarregar a página
 
+### 📚 Catálogo de Livros
+
+- Exibe todos os livros cadastrados no back-end
+- Layout responsivo
+- Atualização automática sem recarregar a página
+
+### ✨ **📌 NOVAS FUNCIONALIDADES**
+
+#### ➕ **Adicionar Livro**
+
+- Nova tela/formulário para cadastrar livros no sistema
+- Integração via Axios com o endpoint de criação
+- Notificações de sucesso/erro
+- Atualização automática da lista após adicionar
+
+#### ⭐ **Explorar → Livros em Destaque**
+
+- Botão **Explorar** agora redireciona para uma página contendo **livros destacados**
+- Exibição de cards com livros recomendados/destaques
+- Dados carregados da API
+- Página totalmente integrada ao fluxo de navegação
+
 ### 🧭 Navbar
 - Componente fixo de navegação entre as páginas **Login**, **Cadastro** e **Catálogo**
 - Implementado com **React Router DOM**

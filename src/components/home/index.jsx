@@ -67,7 +67,7 @@ function Home() {
     {
       titulo:"Coraline",
       imagem:"https://m.media-amazon.com/images/I/91DZobBc1BL._SY466_.jpg",
-    }
+    },
   ];
 
   return (
